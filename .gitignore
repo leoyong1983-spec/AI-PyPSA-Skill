@@ -1,0 +1,6 @@
+.venv/
+_scratch_init/
+outputs/
+__pycache__/
+*.pyc
+

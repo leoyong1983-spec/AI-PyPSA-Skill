@@ -1,0 +1,7 @@
+interface:
+  display_name: "AI PyPSA Skill"
+  short_description: "Run auditable 8760h PyPSA dispatch studies."
+  default_prompt: "Use $ai-pypsa-skill to run an 8760h dispatch demo and produce audit-ready outputs."
+policy:
+  allow_implicit_invocation: true
+

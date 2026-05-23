@@ -1,0 +1,209 @@
+{
+  "status": "ok",
+  "failure": null,
+  "case_name": "demo_8760_dispatch",
+  "solver": {
+    "status": "ok",
+    "termination_condition": "optimal",
+    "name": "highs"
+  },
+  "summary": {
+    "load_mwh": 502695.20947899995,
+    "renewable_available_mwh": 180105.90359,
+    "renewable_dispatch_mwh": 179987.0071975263,
+    "renewable_curtailment_mwh": 118.89639247368424,
+    "renewable_curtailment_rate": 0.0006601471140243385,
+    "grid_import_mwh": 264439.71460923995,
+    "backup_generation_mwh": 57806.37871095025,
+    "unserved_energy_mwh": 3113.9498618525,
+    "unserved_energy_rate": 0.0061945087264305525,
+    "storage_charge_mwh": 27510.163082759,
+    "storage_discharge_mwh": 24858.32218219,
+    "storage_min_soc_mwh": 8.0,
+    "storage_max_soc_mwh": 80.0,
+    "scope1_activity_mwh": 57806.37871095025,
+    "scope1_tco2": 41620.59267188418,
+    "scope2_activity_mwh": 264439.71460923995,
+    "scope2_tco2": 145441.84303508195,
+    "green_temporal_matching_mwh": 177335.16629695732,
+    "green_temporal_matching_rate": 0.352768761175882,
+    "night_grid_import_mwh": 165968.52464080334,
+    "night_grid_import_hours": 4745,
+    "storage_stress_hours": 1813
+  },
+  "diagnostics": {
+    "night_gray_dependence_detected": true,
+    "storage_insufficiency_detected": true,
+    "night_gray_top_hours": [
+      {
+        "timestamp": "2025-12-31 23:00:00",
+        "load_mw": 63.952621,
+        "grid_import_mw": 35.0,
+        "backup_generation_mw": -0.0,
+        "storage_soc_mwh": 8.0,
+        "unserved_energy_mw": -0.0
+      },
+      {
+        "timestamp": "2025-01-01 00:00:00",
+        "load_mw": 56.581964,
+        "grid_import_mw": 35.0,
+        "backup_generation_mw": -0.0,
+        "storage_soc_mwh": 28.834775,
+        "unserved_energy_mw": -0.0
+      },
+      {
+        "timestamp": "2025-01-01 01:00:00",
+        "load_mw": 56.672492,
+        "grid_import_mw": 35.0,
+        "backup_generation_mw": -0.0,
+        "storage_soc_mwh": 17.87202,
+        "unserved_energy_mw": -0.0
+      },
+      {
+        "timestamp": "2025-01-01 02:00:00",
+        "load_mw": 56.914796,
+        "grid_import_mw": 35.0,
+        "backup_generation_mw": 10.376496,
+        "storage_soc_mwh": 17.87202,
+        "unserved_energy_mw": -0.0
+      },
+      {
+        "timestamp": "2025-01-01 03:00:00",
+        "load_mw": 57.453741,
+        "grid_import_mw": 35.0,
+        "backup_generation_mw": 10.638641,
+        "storage_soc_mwh": 17.87202,
+        "unserved_energy_mw": -0.0
+      },
+      {
+        "timestamp": "2025-01-01 04:00:00",
+        "load_mw": 58.440361,
+        "grid_import_mw": 35.0,
+        "backup_generation_mw": 11.353336,
+        "storage_soc_mwh": 17.87202,
+        "unserved_energy_mw": -0.0
+      },
+      {
+        "timestamp": "2025-01-01 05:00:00",
+        "load_mw": 59.901848,
+        "grid_import_mw": 35.0,
+        "backup_generation_mw": 9.487191,
+        "storage_soc_mwh": 14.649171,
+        "unserved_energy_mw": -0.0
+      },
+      {
+        "timestamp": "2025-01-01 06:00:00",
+        "load_mw": 61.594239,
+        "grid_import_mw": 35.0,
+        "backup_generation_mw": 13.982589,
+        "storage_soc_mwh": 14.649171,
+        "unserved_energy_mw": -0.0
+      },
+      {
+        "timestamp": "2025-01-01 18:00:00",
+        "load_mw": 68.725686,
+        "grid_import_mw": 35.0,
+        "backup_generation_mw": 15.0,
+        "storage_soc_mwh": 75.845778,
+        "unserved_energy_mw": -0.0
+      },
+      {
+        "timestamp": "2025-12-30 20:00:00",
+        "load_mw": 74.408365,
+        "grid_import_mw": 35.0,
+        "backup_generation_mw": 15.0,
+        "storage_soc_mwh": 29.695396,
+        "unserved_energy_mw": -0.0
+      }
+    ],
+    "storage_stress_top_hours": [
+      {
+        "timestamp": "2025-07-08 06:00:00",
+        "load_mw": 61.879897,
+        "grid_import_mw": 35.0,
+        "backup_generation_mw": 15.0,
+        "storage_soc_mwh": 8.0,
+        "unserved_energy_mw": 8.846247
+      },
+      {
+        "timestamp": "2025-01-07 06:00:00",
+        "load_mw": 61.899192,
+        "grid_import_mw": 35.0,
+        "backup_generation_mw": 15.0,
+        "storage_soc_mwh": 8.0,
+        "unserved_energy_mw": 8.191892
+      },
+      {
+        "timestamp": "2025-06-13 23:00:00",
+        "load_mw": 62.095966,
+        "grid_import_mw": 35.0,
+        "backup_generation_mw": 15.0,
+        "storage_soc_mwh": 8.0,
+        "unserved_energy_mw": 7.325666
+      },
+      {
+        "timestamp": "2025-11-14 23:00:00",
+        "load_mw": 58.336773,
+        "grid_import_mw": 35.0,
+        "backup_generation_mw": 15.0,
+        "storage_soc_mwh": 8.0,
+        "unserved_energy_mw": 7.086773
+      },
+      {
+        "timestamp": "2025-01-07 07:00:00",
+        "load_mw": 63.300511,
+        "grid_import_mw": 35.0,
+        "backup_generation_mw": 15.0,
+        "storage_soc_mwh": 8.0,
+        "unserved_energy_mw": 6.840736
+      },
+      {
+        "timestamp": "2025-07-29 06:00:00",
+        "load_mw": 61.685227,
+        "grid_import_mw": 35.0,
+        "backup_generation_mw": 15.0,
+        "storage_soc_mwh": 8.0,
+        "unserved_energy_mw": 6.667102
+      },
+      {
+        "timestamp": "2025-11-27 06:00:00",
+        "load_mw": 57.586218,
+        "grid_import_mw": 35.0,
+        "backup_generation_mw": 15.0,
+        "storage_soc_mwh": 8.0,
+        "unserved_energy_mw": 6.336218
+      },
+      {
+        "timestamp": "2025-12-26 06:00:00",
+        "load_mw": 61.138582,
+        "grid_import_mw": 35.0,
+        "backup_generation_mw": 15.0,
+        "storage_soc_mwh": 8.0,
+        "unserved_energy_mw": 6.192832
+      },
+      {
+        "timestamp": "2025-06-18 23:00:00",
+        "load_mw": 62.698333,
+        "grid_import_mw": 35.0,
+        "backup_generation_mw": 15.0,
+        "storage_soc_mwh": 8.487908,
+        "unserved_energy_mw": 6.145433
+      },
+      {
+        "timestamp": "2025-12-17 23:00:00",
+        "load_mw": 62.640774,
+        "grid_import_mw": 35.0,
+        "backup_generation_mw": 15.0,
+        "storage_soc_mwh": 8.0,
+        "unserved_energy_mw": 6.133299
+      }
+    ]
+  },
+  "outputs": {
+    "dispatch_result_json": "dispatch_result.json",
+    "timeseries_csv": "timeseries.csv",
+    "mismatch_summary_md": "mismatch_summary.md",
+    "figures_dir": "figures",
+    "calculation_log_md": "calculation_log.md"
+  }
+}

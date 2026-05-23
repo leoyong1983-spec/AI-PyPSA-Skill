@@ -1,0 +1,6 @@
+pypsa>=1.1
+highspy>=1.10
+pandas>=2.2
+matplotlib>=3.8
+scipy>=1.13
+
