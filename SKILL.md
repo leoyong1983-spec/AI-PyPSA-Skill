@@ -100,3 +100,7 @@ For advanced work, extend the same input/output contract before adding:
 - market price optimization
 - stochastic scenarios
 - hydrogen/ammonia coupling
+
+## License
+
+This project is released under the GNU Affero General Public License v3.0 only (`AGPL-3.0-only`). See `LICENSE`.
