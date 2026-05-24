@@ -17,8 +17,8 @@ import importlib.util
 import json
 import math
 import platform
+import re
 import sys
-import traceback
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -36,6 +36,39 @@ class DispatchFailure(Exception):
         super().__init__(message)
         self.failure_class = failure_class
         self.message = message
+
+
+def public_path(path: Path | str | None) -> str:
+    """Return a path string safe for public artifacts."""
+    if path is None:
+        return ""
+    raw = str(path)
+    try:
+        p = Path(raw)
+        if p.is_absolute():
+            return f"<absolute-path:{p.name}>"
+    except Exception:
+        pass
+    return raw
+
+
+def sanitize_public_text(text: str) -> str:
+    """Redact likely local absolute paths from public artifacts."""
+    text = re.sub(r"[A-Za-z]:\\[^\s`\"']+", "<absolute-path>", text)
+    text = re.sub(r"(?<!:)//[^\s`\"']+", "<absolute-path>", text)
+    return text
+
+
+def public_command(args: argparse.Namespace) -> str:
+    parts = ["run_dispatch.py"]
+    if args.demo:
+        parts.append("--demo")
+    if args.config:
+        parts.extend(["--config", public_path(args.config)])
+    if args.profiles:
+        parts.extend(["--profiles", public_path(args.profiles)])
+    parts.extend(["--output", public_path(args.output)])
+    return " ".join(parts)
 
 
 @dataclass
@@ -134,7 +167,7 @@ def load_config(config_path: Path | None, demo: bool) -> dict[str, Any]:
     config = default_config()
     if config_path:
         if not config_path.exists():
-            raise DispatchFailure("missing_profile", f"Config file not found: {config_path}")
+            raise DispatchFailure("missing_profile", f"Config file not found: {public_path(config_path)}")
         try:
             with config_path.open("r", encoding="utf-8") as f:
                 user_config = json.load(f)
@@ -183,7 +216,7 @@ def load_profiles(pd: Any, profiles_path: Path | None, config: dict[str, Any], d
     if profiles_path is None:
         raise DispatchFailure("missing_profile", "Profile CSV path is required unless --demo is used.")
     if not profiles_path.exists():
-        raise DispatchFailure("missing_profile", f"Profile CSV not found: {profiles_path}")
+        raise DispatchFailure("missing_profile", f"Profile CSV not found: {public_path(profiles_path)}")
     try:
         return pd.read_csv(profiles_path)
     except Exception as exc:
@@ -676,6 +709,20 @@ def write_mismatch_summary(path: Path, summary: dict[str, Any], diagnostics: dic
         f"- Scope 2 activity: {fmt(summary['scope2_activity_mwh'])} MWh; "
         f"emissions: {fmt(summary['scope2_tco2'])} tCO2",
         "",
+        "## Trinity Acceptance Notes",
+        "",
+        f"- 绿电时序错配: residual gray-or-unserved energy is "
+        f"{fmt(summary['load_mwh'] - summary['green_temporal_matching_mwh'])} MWh; "
+        f"green temporal matching rate is {summary['green_temporal_matching_rate']:.2%}.",
+        f"- 储能 SOC: SOC range is {fmt(summary['storage_min_soc_mwh'])} to "
+        f"{fmt(summary['storage_max_soc_mwh'])} MWh; storage stress hours are "
+        f"{summary['storage_stress_hours']}.",
+        f"- 灰电依赖: night grid-import dependence is "
+        f"{diagnostics['night_gray_dependence_detected']}; night grid import is "
+        f"{fmt(summary['night_grid_import_mwh'])} MWh.",
+        f"- 缺电/备用电源: unserved energy is {fmt(summary['unserved_energy_mwh'])} MWh; "
+        f"backup generation is {fmt(summary['backup_generation_mwh'])} MWh.",
+        "",
         "## Diagnostics",
         "",
         f"- Night grid-import dependence detected: {diagnostics['night_gray_dependence_detected']}",
@@ -709,12 +756,13 @@ def write_log(
         "# Calculation Log",
         "",
         f"- Run timestamp UTC: {datetime.now(timezone.utc).isoformat()}",
-        f"- Command: {' '.join(sys.argv)}",
-        f"- Python: {sys.version.split()[0]} ({sys.executable})",
+        f"- Command: {public_command(args)}",
+        f"- Python: {sys.version.split()[0]} (<redacted executable>)",
         f"- Platform: {platform.platform()}",
         f"- PyPSA version: {pypsa_version or 'unavailable'}",
-        f"- Output directory: {Path(args.output).resolve()}",
+        f"- Output directory: {public_path(args.output)}",
         f"- Status: {status}",
+        "- Public artifact policy: local absolute paths are redacted or omitted.",
     ]
     if termination_condition:
         lines.append(f"- Solver termination condition: {termination_condition}")
@@ -722,7 +770,7 @@ def write_log(
         lines.extend(
             [
                 f"- Failure class: {failure['class']}",
-                f"- Failure message: {failure['message']}",
+                f"- Failure message: {sanitize_public_text(failure['message'])}",
             ]
         )
     lines.extend(
@@ -743,7 +791,7 @@ def write_log(
             "",
         ]
     )
-    path.write_text("\n".join(lines), encoding="utf-8")
+    path.write_text(sanitize_public_text("\n".join(lines)), encoding="utf-8")
 
 
 def make_figures(mods: RuntimeModules, timeseries: Any, figures_dir: Path) -> None:
@@ -815,11 +863,11 @@ def run(args: argparse.Namespace) -> int:
     try:
         mods = import_runtime_modules()
         pypsa_version = getattr(mods.pypsa, "__version__", "unknown")
-        config = load_config(Path(args.config).resolve() if args.config else None, args.demo)
+        config = load_config(Path(args.config) if args.config else None, args.demo)
         validate_config(config)
         profiles = load_profiles(
             mods.pd,
-            Path(args.profiles).resolve() if args.profiles else None,
+            Path(args.profiles) if args.profiles else None,
             config,
             args.demo,
         )
@@ -858,7 +906,7 @@ def run(args: argparse.Namespace) -> int:
         write_log(log_path, args, config, "ok", termination_condition, None, pypsa_version)
         return 0
     except DispatchFailure as exc:
-        failure = {"class": exc.failure_class, "message": exc.message}
+        failure = {"class": exc.failure_class, "message": sanitize_public_text(exc.message)}
         write_json(
             result_path,
             {
@@ -877,7 +925,11 @@ def run(args: argparse.Namespace) -> int:
         print(f"{exc.failure_class}: {exc.message}", file=sys.stderr)
         return 2
     except Exception as exc:
-        failure = {"class": "runtime_error", "message": str(exc), "traceback": traceback.format_exc()}
+        failure = {
+            "class": "runtime_error",
+            "message": sanitize_public_text(str(exc)),
+            "traceback_redacted": True,
+        }
         write_json(
             result_path,
             {

@@ -1,6 +1,7 @@
 # Output Contract
 
 This file defines the stable interface for `scripts/run_dispatch.py`.
+JSON schemas are stored in `schemas/input_schema.json` and `schemas/output_schema.json`.
 
 ## Config JSON
 
@@ -78,3 +79,14 @@ The CSV must have exactly 8760 rows. Renewable profile values are per unit, from
 `figures/` contains PNG plots for dispatch, SOC, and mismatch diagnostics.
 
 `calculation_log.md` contains the execution record, environment, validation checks, solver status, and failure classification.
+It is a public artifact and must not contain local absolute paths. Local Python executable paths, absolute output directories, and absolute input paths are redacted or omitted.
+
+## Acceptance
+
+Run SKILL-002A acceptance with:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\run_acceptance.py
+```
+
+Acceptance covers demo success, 8760-row timeseries, required figures, missing profile, bad unit, missing solver, and public artifact path redaction.

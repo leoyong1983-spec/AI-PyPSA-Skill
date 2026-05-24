@@ -11,7 +11,13 @@ Use this skill for auditable electricity dispatch studies and AI-controlled PyPS
 
 1. Confirm the study directory and keep all generated outputs inside it.
 2. Use `scripts/run_dispatch.py` as the deterministic execution entrypoint.
-3. For a quick acceptance run, execute:
+3. Check readiness before running a study:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\readiness_check.py
+```
+
+4. For a quick dispatch run, execute:
 
 ```powershell
 .\.venv\Scripts\python.exe scripts\run_dispatch.py --demo --output outputs\demo_8760
@@ -19,14 +25,20 @@ Use this skill for auditable electricity dispatch studies and AI-controlled PyPS
 
 If `.venv` is missing, create it with Python 3.10-3.13 and install `scripts/requirements-pypsa.txt`.
 
-4. For user data, provide a JSON config and an 8760-row CSV profile file:
+5. For full SKILL-002A acceptance, execute:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\run_acceptance.py
+```
+
+6. For user data, provide a JSON config and an 8760-row CSV profile file:
 
 ```powershell
 .\.venv\Scripts\python.exe scripts\run_dispatch.py --config path\to\config.json --profiles path\to\profiles.csv --output outputs\case_name
 ```
 
-5. Inspect `dispatch_result.json` first, then `mismatch_summary.md`, then `calculation_log.md`.
-6. Treat a successful run as complete only when these outputs exist:
+7. Inspect `dispatch_result.json` first, then `mismatch_summary.md`, then `calculation_log.md`.
+8. Treat a successful run as complete only when these outputs exist:
    - `dispatch_result.json`
    - `timeseries.csv`
    - `mismatch_summary.md`
@@ -45,6 +57,7 @@ The workflow supports:
 - grid and backup emission factors
 
 See `references/output_contract.md` before changing input or output schemas.
+Validate schema changes against `schemas/input_schema.json` and `schemas/output_schema.json`.
 
 ## Required Diagnostics
 
@@ -72,6 +85,10 @@ The runner must classify failures as:
 - `bad_unit`: invalid units, invalid negative power/energy, profile values outside 0-1 per unit, impossible SOC bounds, or invalid emission factors.
 - `runtime_error`: unexpected execution failure.
 
+## Public Artifacts
+
+`dispatch_result.json`, `timeseries.csv`, `mismatch_summary.md`, `figures/`, and `calculation_log.md` are public artifacts for Trinity evidence. They must not contain local absolute paths such as Windows drive paths or user home directories. The runner redacts or omits local executable and output paths in public logs.
+
 ## Implementation Notes
 
 The bundled runner uses PyPSA with one electric bus, optional battery energy bus, renewable generators, grid import as a bounded generator, backup generation, and a high-penalty unserved-energy generator. Storage is represented as `Store` plus charge/discharge `Link` components so SOC min/max limits are enforced directly.
@@ -83,4 +100,3 @@ For advanced work, extend the same input/output contract before adding:
 - market price optimization
 - stochastic scenarios
 - hydrogen/ammonia coupling
-

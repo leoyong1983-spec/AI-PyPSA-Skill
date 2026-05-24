@@ -11,6 +11,13 @@
 - Scope 1 activity: 57,806.379 MWh; emissions: 41,620.593 tCO2
 - Scope 2 activity: 264,439.715 MWh; emissions: 145,441.843 tCO2
 
+## Trinity Acceptance Notes
+
+- 绿电时序错配: residual gray-or-unserved energy is 325,360.043 MWh; green temporal matching rate is 35.28%.
+- 储能 SOC: SOC range is 8.000 to 80.000 MWh; storage stress hours are 1813.
+- 灰电依赖: night grid-import dependence is True; night grid import is 165,968.525 MWh.
+- 缺电/备用电源: unserved energy is 3,113.950 MWh; backup generation is 57,806.379 MWh.
+
 ## Diagnostics
 
 - Night grid-import dependence detected: True

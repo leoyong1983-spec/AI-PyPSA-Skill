@@ -1,25 +1,3 @@
-# Calculation Log
-
-- Run timestamp UTC: 2026-05-24T00:29:36.142325+00:00
-- Command: run_dispatch.py --demo --output outputs\demo_8760
-- Python: 3.13.13 (<redacted executable>)
-- Platform: Windows-11-10.0.26200-SP0
-- PyPSA version: 1.2.1
-- Output directory: outputs\demo_8760
-- Status: ok
-- Public artifact policy: local absolute paths are redacted or omitted.
-- Solver termination condition: optimal
-
-## Validation
-
-- Expected hours: 8760
-- Required units: MW, MWh, tCO2/MWh
-- Renewable profiles: per unit [0, 1]
-- Storage SOC bounds: enforced through PyPSA Store e_min_pu/e_max_pu
-
-## Effective Config
-
-```json
 {
   "case_name": "demo_8760_dispatch",
   "units": {
@@ -72,4 +50,4 @@
     "log_to_console": false
   }
 }
-```
+

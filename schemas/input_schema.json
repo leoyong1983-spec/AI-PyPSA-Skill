@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/ai-pypsa-skill/input_schema.json",
+  "title": "AI PyPSA Dispatch Input Config",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["units", "columns", "capacities", "grid", "storage", "backup_generator", "penalties"],
+  "properties": {
+    "case_name": {"type": "string"},
+    "units": {
+      "type": "object",
+      "required": ["load", "power", "energy", "emission_factor"],
+      "properties": {
+        "load": {"const": "MW"},
+        "power": {"const": "MW"},
+        "energy": {"const": "MWh"},
+        "emission_factor": {"const": "tCO2/MWh"}
+      }
+    },
+    "columns": {
+      "type": "object",
+      "required": ["load_mw", "solar_pu", "wind_pu"],
+      "properties": {
+        "timestamp": {"type": "string"},
+        "load_mw": {"type": "string"},
+        "solar_pu": {"type": "string"},
+        "wind_pu": {"type": "string"}
+      }
+    },
+    "capacities": {
+      "type": "object",
+      "required": ["solar_mw", "wind_mw"],
+      "properties": {
+        "solar_mw": {"type": "number", "minimum": 0},
+        "wind_mw": {"type": "number", "minimum": 0}
+      }
+    },
+    "grid": {
+      "type": "object",
+      "required": ["import_limit_mw", "marginal_cost", "emission_factor_tco2_per_mwh"],
+      "properties": {
+        "import_limit_mw": {"type": "number", "minimum": 0},
+        "marginal_cost": {"type": "number", "minimum": 0},
+        "emission_factor_tco2_per_mwh": {"type": "number", "minimum": 0}
+      }
+    },
+    "storage": {
+      "type": "object",
+      "required": [
+        "power_mw",
+        "energy_mwh",
+        "efficiency_charge",
+        "efficiency_discharge",
+        "soc_min_mwh",
+        "soc_max_mwh",
+        "soc_initial_mwh"
+      ],
+      "properties": {
+        "power_mw": {"type": "number", "minimum": 0},
+        "energy_mwh": {"type": "number", "minimum": 0},
+        "efficiency_charge": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "efficiency_discharge": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "soc_min_mwh": {"type": "number", "minimum": 0},
+        "soc_max_mwh": {"type": "number", "minimum": 0},
+        "soc_initial_mwh": {"type": "number", "minimum": 0},
+        "standing_loss_per_hour": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "backup_generator": {
+      "type": "object",
+      "required": ["p_nom_mw", "marginal_cost", "emission_factor_tco2_per_mwh"],
+      "properties": {
+        "p_nom_mw": {"type": "number", "minimum": 0},
+        "marginal_cost": {"type": "number", "minimum": 0},
+        "emission_factor_tco2_per_mwh": {"type": "number", "minimum": 0}
+      }
+    },
+    "penalties": {
+      "type": "object",
+      "required": ["unserved_energy_cost"],
+      "properties": {
+        "unserved_energy_cost": {"type": "number", "minimum": 0},
+        "allow_unserved": {"type": "boolean"}
+      }
+    },
+    "solver": {
+      "type": "object",
+      "properties": {
+        "name": {"type": "string"},
+        "log_to_console": {"type": "boolean"}
+      }
+    }
+  }
+}
+

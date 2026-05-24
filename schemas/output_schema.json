@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.local/ai-pypsa-skill/output_schema.json",
+  "title": "AI PyPSA Dispatch Result",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["status", "failure", "summary", "diagnostics", "outputs"],
+  "properties": {
+    "status": {"enum": ["ok", "failed"]},
+    "failure": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "required": ["class", "message"],
+          "properties": {
+            "class": {
+              "enum": [
+                "missing_dependency",
+                "missing_solver",
+                "infeasible",
+                "missing_profile",
+                "bad_unit",
+                "runtime_error"
+              ]
+            },
+            "message": {"type": "string"},
+            "traceback_redacted": {"type": "boolean"}
+          }
+        }
+      ]
+    },
+    "case_name": {"type": ["string", "null"]},
+    "solver": {
+      "type": "object",
+      "properties": {
+        "status": {"type": "string"},
+        "termination_condition": {"type": "string"},
+        "name": {"type": "string"}
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": {"type": "number"}
+    },
+    "diagnostics": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {
+        "dispatch_result_json": {"type": "string"},
+        "timeseries_csv": {"type": "string"},
+        "mismatch_summary_md": {"type": "string"},
+        "figures_dir": {"type": "string"},
+        "calculation_log_md": {"type": "string"}
+      }
+    }
+  }
+}
+
