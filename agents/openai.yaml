@@ -1,7 +1,6 @@
 interface:
-  display_name: "AI PyPSA Skill"
-  short_description: "Run auditable 8760h PyPSA dispatch studies."
-  default_prompt: "Use $ai-pypsa-skill to run an 8760h dispatch demo and produce audit-ready outputs."
+  display_name: "AI PyPSA Skill / AI PyPSA 技能"
+  short_description: "Run auditable 8760h PyPSA dispatch / 运行8760小时可审计调度"
+  default_prompt: "Use $ai-pypsa-skill to run an 8760h dispatch demo and produce bilingual audit-ready outputs. / 使用 $ai-pypsa-skill 运行8760小时调度demo并输出中英双语审计产物。"
 policy:
   allow_implicit_invocation: true
-
